@@ -87,7 +87,7 @@ export class HistoryHomePage {
 				if (searchFilter === '') {
 					return true;
 				}
-				return item?.search_key?.toLowerCase()?.search(searchFilter) >= 0;
+				return item?.search_key?.toLowerCase()?.search(searchFilter.toLowerCase()) >= 0;
 			});
 	}
 
