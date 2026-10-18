@@ -1,7 +1,26 @@
 <div class="main-wrapper">
 	<div class="flex flex-col gap-y-4.5">
+        <div class="custom-search-bar">
+          <ion-icon class="search-icon" src="assets/svg/search.svg"></ion-icon>
+          <ion-input [(ngModel)]="searchFilter" placeholder="Search..."></ion-input>
+          <ion-select
+                #sortSelect
+              interface="action-sheet"
+              style="display: none;"
+              [(ngModel)]="selectedSort"
+            >
+              <ion-select-option value="az">A-Z</ion-select-option>
+              <ion-select-option value="za">Z-A</ion-select-option>
+              <ion-select-option value="newest">Newest First</ion-select-option>
+              <ion-select-option value="oldest">Oldest First</ion-select-option>
+            </ion-select>
+          
+          <ion-button fill="clear" size="small" (click)="openSelect()">
+            <ion-icon slot="icon-only" src="assets/svg/sort.svg"></ion-icon>
+          </ion-button>
+        </div>
 		@for (item of fdaQuery.data(); track $index) {
-		<app-history-card [doc]="item" [docId]="item.id" />
+            <app-history-card [doc]="item" [docId]="item.id" />
 		}
 	</div>
 </div>
