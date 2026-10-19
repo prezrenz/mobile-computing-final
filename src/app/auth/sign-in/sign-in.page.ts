@@ -1,11 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonInput, IonRippleEffect } from '@ionic/angular';
+import { IonContent, IonIcon, IonInput, IonRippleEffect } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { injectMutation } from '@tanstack/angular-query-experimental';
 import { AuthService } from '../../auth.service';
-import { minLength, email, form, FormField } from '@angular/forms/signals';
+import { minLength, email, form, FormField, required } from '@angular/forms/signals';
 import { SpinnerComponent } from '../../spinner/spinner.component';
 
 @Component({
@@ -19,12 +19,14 @@ import { SpinnerComponent } from '../../spinner/spinner.component';
 		CommonModule,
 		FormsModule,
 		FormField,
-		SpinnerComponent
+		SpinnerComponent,
+		IonIcon
 	]
 })
 export class SignInPage {
 	private router = inject(Router);
 
+	passwordVisible = signal(false);
 	signInModel = signal({
 		email: '',
 		password: ''
@@ -32,6 +34,8 @@ export class SignInPage {
 
 	signInForm = form(this.signInModel, (schema) => {
 		email(schema.email, { message: 'Please enter your email.' });
+		required(schema.password, { message: 'This field is required.' });
+		required(schema.email, { message: 'This field is required.' });
 		minLength(schema.password, 5, { message: 'Please enter more details.' });
 	});
 
@@ -54,8 +58,17 @@ export class SignInPage {
 		}
 	}));
 
+	togglePasswordVisibility() {
+		this.passwordVisible.update(() => !this.passwordVisible());
+	}
+
+	inputPasswordType() {
+		return this.passwordVisible() ? 'text' : 'password';
+	}
+
 	handleSignIn() {
 		if (this.signInForm().invalid()) {
+			this.signInForm().markAsTouched();
 			return;
 		}
 

@@ -14,8 +14,10 @@
 					type="email"
 					label-placement="floating"
 					fill="outline"
-					placeholder="Enter email"
-				/>
+					placeholder="Enter username"
+				>
+					<ion-icon slot="start" class="text-xl" src="assets/svg/user.svg"></ion-icon>
+				</ion-input>
 
 				@if (signUpForm.email().touched() && signUpForm.email().invalid()) { @for (error
 				of signUpForm.email().errors(); track error) {
@@ -28,7 +30,9 @@
 					label-placement="floating"
 					fill="outline"
 					placeholder="Enter email"
-				/>
+				>
+					<ion-icon slot="start" class="text-xl" src="assets/svg/mail.svg"></ion-icon>
+				</ion-input>
 
 				@if (signUpForm.password().touched() && signUpForm.password().invalid()) { @for
 				(error of signUpForm.password().errors(); track error) {
@@ -38,9 +42,30 @@
 					label="Password"
 					label-placement="floating"
 					fill="outline"
-					type="password"
+					[type]="inputPasswordType()"
 					placeholder="Enter password"
-				/>
+				>
+					<ion-icon
+						slot="start"
+						class="text-xl"
+						src="assets/svg/circle-lock.svg"
+					></ion-icon>
+
+					<button
+						slot="end"
+						(click)="togglePasswordVisibility()"
+						class="ion-activatable ripple"
+					>
+						@if (passwordVisible()) {
+						<ion-icon class="text-xl" src="assets/svg/eye.svg" />
+						} @else {
+						<ion-icon class="text-xl" src="assets/svg/eye-closed.svg" />
+
+						}
+
+						<ion-ripple-effect></ion-ripple-effect>
+					</button>
+				</ion-input>
 			</div>
 
 			<button
