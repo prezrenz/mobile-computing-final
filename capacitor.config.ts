@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
 	appId: 'com.rise.starter',
-	appName: 'Group RISE',
+	appName: 'BeauWise',
 	webDir: 'www'
 };
 
