@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import {
 	IonContent,
 	IonHeader,
+	IonIcon,
 	IonInput,
 	IonRippleEffect,
 	IonTitle,
@@ -12,7 +13,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { injectMutation } from '@tanstack/angular-query-experimental';
 import { AuthService } from '../../auth.service';
-import { minLength, email, form, FormField } from '@angular/forms/signals';
+import { minLength, email, form, FormField, required } from '@angular/forms/signals';
 import { SpinnerComponent } from '../../spinner/spinner.component';
 
 @Component({
@@ -26,22 +27,27 @@ import { SpinnerComponent } from '../../spinner/spinner.component';
 		CommonModule,
 		FormsModule,
 		FormField,
-		SpinnerComponent
+		SpinnerComponent,
+		IonIcon
 	]
 })
 export class SignUpPage {
 	private router = inject(Router);
 
 	private route = inject(ActivatedRoute);
+	passwordVisible = signal(false);
 
-	signInModel = signal({
+	signUpModel = signal({
 		username: '',
 		email: '',
 		password: ''
 	});
 
-	signUpForm = form(this.signInModel, (schema) => {
+	signUpForm = form(this.signUpModel, (schema) => {
 		email(schema.email, { message: 'Please enter your email.' });
+		required(schema.email, { message: 'This field is required.' });
+		required(schema.password, { message: 'This field is required.' });
+		required(schema.username, { message: 'This field is required.' });
 		minLength(schema.password, 5, { message: 'Please enter more details.' });
 		minLength(schema.username, 5, { message: 'Please enter more details.' });
 	});
@@ -61,6 +67,8 @@ export class SignUpPage {
 
 	handleSignUp() {
 		if (this.signUpForm().invalid()) {
+			this.signUpForm().markAsTouched();
+
 			return;
 		}
 
@@ -71,5 +79,13 @@ export class SignUpPage {
 
 	handleGoSignIn() {
 		this.router.navigate(['auth']);
+	}
+
+	togglePasswordVisibility() {
+		this.passwordVisible.update(() => !this.passwordVisible());
+	}
+
+	inputPasswordType() {
+		return this.passwordVisible() ? 'text' : 'password';
 	}
 }
